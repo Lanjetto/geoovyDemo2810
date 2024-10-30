@@ -1,23 +1,29 @@
 package groovy.com.nexign
 
+import groovy.transform.Canonical
 import groovy.transform.EqualsAndHashCode
+import groovy.transform.Immutable
 import groovy.transform.ToString
 
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 
-@EqualsAndHashCode
-@ToString
-class Person {
-    String name
-    LocalDate dateOfBirth
+@Canonical
+abstract class Person {
+    final String name
+    final LocalDate dateOfBirth
 
+    Person(def name, def dateOfBirth) {
+        this.name = name
+        this.dateOfBirth = dateOfBirth
+    }
 
-//    void talk() {
-//        println "$name talking"
-//    }
+    Person(String name) {
+        this(name, LocalDate.of(1900, 3, 20))
+    }
+    abstract void talk()
 
-    void talk(def person = this) {
+    void talk(def person) {
         println("person's age is ${getAge()}")
         println "$name talk with ${person.name}"
     }
@@ -33,18 +39,19 @@ class Person {
             println "NOT OK"
         }
     }
-
-    def asBoolean() {
-        this.getAge() >=18
-    }
-
-    def asType(Class clazz) {
-        if (clazz == Client) {
-            return new Client(name: name)
-        } else {
-            super.asType(clazz)
-        }
-    }
+//    @Override
+//    def asBoolean() {
+//        this.getAge() >=18
+//    }
+//
+//    @Override
+//    def asType(Class clazz) {
+//        if (clazz == Client) {
+//            return new Client(name: name)
+//        } else {
+//            super.asType(clazz)
+//        }
+//    }
 
 
 }
